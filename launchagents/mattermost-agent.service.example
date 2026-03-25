@@ -1,0 +1,39 @@
+[Unit]
+Description=OpenClaw Mattermost Agent Listener
+After=network.target
+
+[Service]
+ExecStart=__NODE_BIN__ __INDEX_JS__
+WorkingDirectory=__REPO_DIR__/mattermost-listener
+Restart=on-failure
+RestartSec=5
+
+Environment=MM_TOKEN=YOUR_MM_TOKEN
+Environment=TG_BOT_TOKEN=YOUR_TG_BOT_TOKEN
+Environment=TG_CHAT_ID=YOUR_TG_CHAT_ID
+Environment=OPENCLAW_TOKEN=YOUR_OPENCLAW_TOKEN
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target
+
+# Usage (Linux systemd user service):
+#
+# 1. Replace placeholders:
+#    __NODE_BIN__   → path to node binary (e.g. /home/YOUR_USERNAME/.nvm/versions/node/v22.22.0/bin/node)
+#    __INDEX_JS__   → full path to index.js (e.g. /home/YOUR_USERNAME/openclaw-template/mattermost-listener/index.js)
+#    __REPO_DIR__   → full path to this repo (e.g. /home/YOUR_USERNAME/openclaw-template)
+#
+# 2. Fill in environment variable values (tokens)
+#
+# 3. Install and enable:
+#    mkdir -p ~/.config/systemd/user
+#    cp mattermost-agent.service ~/.config/systemd/user/openclaw-mattermost.service
+#    systemctl --user daemon-reload
+#    systemctl --user enable --now openclaw-mattermost.service
+#
+# 4. Check status:
+#    systemctl --user status openclaw-mattermost.service
+#    journalctl --user -u openclaw-mattermost.service -f

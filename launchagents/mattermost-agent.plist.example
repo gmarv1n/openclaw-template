@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.openclaw.mattermost-agent</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>__NODE_BIN__</string>
+    <string>__INDEX_JS__</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>__REPO_DIR__/mattermost-listener</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>MM_TOKEN</key>
+    <string>YOUR_MM_TOKEN</string>
+    <key>TG_BOT_TOKEN</key>
+    <string>YOUR_TG_BOT_TOKEN</string>
+    <key>TG_CHAT_ID</key>
+    <string>YOUR_TG_CHAT_ID</string>
+    <key>OPENCLAW_TOKEN</key>
+    <string>YOUR_OPENCLAW_TOKEN</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>__REPO_DIR__/mattermost-listener/listener.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>__REPO_DIR__/mattermost-listener/listener.err.log</string>
+</dict>
+</plist>
+
+<!-- 
+Usage:
+  1. Replace __NODE_BIN__ with the path to your node binary:
+     which node  →  e.g. /Users/YOUR_USERNAME/.nvm/versions/node/v22.22.0/bin/node
+  
+  2. Replace __INDEX_JS__ with full path to index.js:
+     e.g. /Users/YOUR_USERNAME/openclaw-template/mattermost-listener/index.js
+
+  3. Replace __REPO_DIR__ with full path to this repo:
+     e.g. /Users/YOUR_USERNAME/openclaw-template
+
+  4. Fill in environment variables (tokens)
+
+  5. Copy to LaunchAgents and load:
+     cp mattermost-agent.plist ~/Library/LaunchAgents/com.openclaw.mattermost-agent.plist
+     launchctl load ~/Library/LaunchAgents/com.openclaw.mattermost-agent.plist
+-->

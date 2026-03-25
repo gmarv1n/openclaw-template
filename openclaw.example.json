@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.8-beta.1",
+    "lastTouchedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://YOUR_PROXY_HOST_OR_DELETE_THIS",
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_ANTHROPIC_API_KEY",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "anthropic-proxy": {
+        "baseUrl": "https://YOUR_PROXY_HOST_OR_DELETE_THIS",
+        "apiKey": "YOUR_API_KEY",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "claude-sonnet-4-6",
+            "name": "Claude Sonnet 4.6 (proxy)"
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic-proxy/claude-sonnet-4-6"
+      },
+      "workspace": "/Users/YOUR_USERNAME/.openclaw/workspace",
+      "contextTokens": 150000,
+      "contextPruning": {
+        "mode": "cache-ttl",
+        "ttl": "5m"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      }
+    },
+    "list": [
+      {
+        "id": "main"
+      },
+      {
+        "id": "21o",
+        "name": "21O",
+        "workspace": "/Users/YOUR_USERNAME/projects/agent-21o-workspace",
+        "agentDir": "/Users/YOUR_USERNAME/.openclaw/agents/21o/agent",
+        "tools": {
+          "profile": "coding"
+        }
+      },
+      {
+        "id": "9s",
+        "name": "9S",
+        "workspace": "/Users/YOUR_USERNAME/projects/agent-9s-workspace",
+        "agentDir": "/Users/YOUR_USERNAME/.openclaw/agents/9s/agent",
+        "tools": {
+          "profile": "coding"
+        }
+      }
+    ]
+  },
+  "tools": {
+    "profile": "coding",
+    "sessions": {
+      "visibility": "all"
+    },
+    "agentToAgent": {
+      "enabled": true
+    }
+  },
+  "bindings": [
+    {
+      "type": "route",
+      "agentId": "21o",
+      "match": {
+        "channel": "telegram",
+        "accountId": "21o-telegram"
+      }
+    },
+    {
+      "type": "route",
+      "agentId": "9s",
+      "match": {
+        "channel": "telegram",
+        "accountId": "9s-telegram"
+      }
+    }
+  ],
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
+      "groupPolicy": "open",
+      "streaming": "partial",
+      "accounts": {
+        "default": {
+          "dmPolicy": "pairing",
+          "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
+          "groupPolicy": "open",
+          "streaming": "partial"
+        },
+        "21o-telegram": {
+          "name": "21O",
+          "enabled": true,
+          "dmPolicy": "open",
+          "botToken": "YOUR_TELEGRAM_BOT_TOKEN_21O",
+          "allowFrom": [
+            123456789,
+            "*"
+          ],
+          "groupAllowFrom": [
+            987654321
+          ],
+          "groupPolicy": "open",
+          "streaming": "partial"
+        },
+        "9s-telegram": {
+          "name": "9S",
+          "enabled": true,
+          "dmPolicy": "open",
+          "botToken": "YOUR_TELEGRAM_BOT_TOKEN_9S",
+          "allowFrom": [
+            "*"
+          ],
+          "groupPolicy": "open",
+          "streaming": "partial"
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "controlUi": {
+      "allowedOrigins": [
+        "https://YOUR_TAILSCALE_HOST_OR_DELETE_THIS"
+      ]
+    },
+    "auth": {
+      "mode": "token",
+      "token": "YOUR_GATEWAY_TOKEN",
+      "allowTailscale": true
+    },
+    "tools": {
+      "allow": [
+        "sessions_send"
+      ]
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "plugins": {
+    "entries": {
+      "telegram": {
+        "enabled": true
+      }
+    }
+  }
+}
