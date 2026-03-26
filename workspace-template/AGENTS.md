@@ -12,10 +12,34 @@ Before doing anything else:
 
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
-3. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-4. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+3. Read `CONTEXT.md` — what's currently in progress
+4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
+5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+6. If `CONTEXT.md` wasn't updated in >24h → run heartbeat distillation now
 
 Don't ask permission. Just do it.
+
+## Memory Protocols (strict)
+
+These are not suggestions. Follow them every time.
+
+### When you take a task → immediately (before starting work):
+```
+CONTEXT.md ## В работе:
+- [ ] TASK (who: agent-name, started: YYYY-MM-DD HH:MM)
+```
+
+### When you finish a task:
+```
+1. Mark [x] in CONTEXT.md + completion date
+2. Add event to CONTEXT.md ## Events (YYYY-MM-DD HH:MM [agent] what)
+3. If important decision → MEMORY.md ## Recent
+4. Write to memory/YYYY-MM-DD.md
+```
+
+### Hard limits:
+- CONTEXT.md: max 20 lines of content, max 5 events, delete entries older than 48h
+- MEMORY.md Summary: max 30 lines. When exceeded → archive to memory/archive/YYYY-MM.md
 
 ## Memory
 
