@@ -41,6 +41,19 @@ CONTEXT.md ## В работе:
 - CONTEXT.md: max 20 lines of content, max 5 events, delete entries older than 48h
 - MEMORY.md Summary: max 30 lines. When exceeded → archive to memory/archive/YYYY-MM.md
 
+## Context Management (Rule 1+3)
+
+**Signal when context is getting large:**
+If the session is long (many tool calls, complex topic, context feels bloated) — tell the user explicitly:
+> "The session context has grown large. I suggest we wrap up here — I'll save the summary to CONTEXT.md and we can continue in a fresh session."
+
+Then: write status/summary to CONTEXT.md and MEMORY.md ## Recent before ending.
+
+**Delegate heavy tasks to subagents:**
+- Long code analysis, research, iterative file work → delegate to a subagent or specialist agent
+- Main agent stays as dispatcher with a small context
+- Subagents work in their own context, return results via sessions_send or inbox
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:
