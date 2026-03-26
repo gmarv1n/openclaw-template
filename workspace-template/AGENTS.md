@@ -54,6 +54,23 @@ Then: write status/summary to CONTEXT.md and MEMORY.md ## Recent before ending.
 - Main agent stays as dispatcher with a small context
 - Subagents work in their own context, return results via sessions_send or inbox
 
+## Subagents — when and how
+
+### Triggers (any one → spawn a subagent):
+1. Task requires >10 tool calls (code analysis, research, iterative file work)
+2. Task is parallelizable — can be split into independent parts
+3. Current context is already large and the task will push it over
+
+### Required subagent output format:
+```
+RESULT: [what was done]
+FILES: [what was created/changed]
+QUESTIONS: [what requires human decision]
+```
+
+### For non-main agents — additionally:
+After completing a heavy task → notify the main agent via `sessions_send(label="main")` with the summary in the same format.
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:
