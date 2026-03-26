@@ -37,6 +37,32 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+## Grafana / Loki (пример)
+
+Если у вас есть Grafana с подключённым Loki — агент может читать логи по запросу.
+
+- **Grafana URL:** `https://YOUR_GRAFANA_HOST`
+- **Token:** `glsa_XXXXXXXXXXXXXXXXXXXX` (Service Account token)
+- **Loki datasource UID:** найти через `GET /api/datasources`, тип `loki`
+- **Loki proxy URL:** `https://YOUR_GRAFANA_HOST/api/datasources/proxy/uid/YOUR_LOKI_UID/loki/api/v1/`
+
+### Как получить токен:
+1. Grafana → Administration → Service accounts
+2. Создать service account → Add token → скопировать
+
+### Пример запроса логов (LogQL):
+```bash
+curl -s -H "Authorization: Bearer YOUR_TOKEN" \
+  "https://YOUR_GRAFANA_HOST/api/datasources/proxy/uid/YOUR_LOKI_UID/loki/api/v1/query_range" \
+  --data-urlencode 'query={namespace="your-service"}' \
+  --data-urlencode "start=$(date -v-1H +%s)000000000" \
+  --data-urlencode "end=$(date +%s)000000000" \
+  --data-urlencode "limit=50"
+```
+
+### Полезные лейблы Loki:
+- `namespace`, `app`, `container`, `pod`, `job`, `service_name`
+
 ## Mattermost (пример)
 
 - **URL:** `https://YOUR_MATTERMOST_HOST`
