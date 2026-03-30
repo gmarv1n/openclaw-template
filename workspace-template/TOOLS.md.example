@@ -43,6 +43,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 - **Grafana URL:** `https://YOUR_GRAFANA_HOST`
 - **Token:** `glsa_XXXXXXXXXXXXXXXXXXXX` (Service Account token)
+- **Service Account:** имя сервисного аккаунта в Grafana
 - **Loki datasource UID:** найти через `GET /api/datasources`, тип `loki`
 - **Loki proxy URL:** `https://YOUR_GRAFANA_HOST/api/datasources/proxy/uid/YOUR_LOKI_UID/loki/api/v1/`
 
@@ -50,18 +51,36 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 1. Grafana → Administration → Service accounts
 2. Создать service account → Add token → скопировать
 
+### ⚠️ Правила работы с Loki (обязательно соблюдать)
+
+- **Запросы — редкие и небольшие.** Не долбить Loki в цикле, не делать несколько запросов подряд без нужды.
+- **Лимит:** всегда указывать `limit=200` или меньше. Никогда не делать запрос без лимита.
+- **Период:** не запрашивать больше 6 часов за раз. Для анализа тенденций — лучше 1-2 часа.
+- **Фильтры:** всегда добавлять фильтр по уровню (`|= "ERROR"`) или ключевому слову. Без фильтра — только если период ≤ 30 мин.
+- **direction=backward** — последние события сверху, эффективнее для диагностики.
+
 ### Пример запроса логов (LogQL):
 ```bash
-curl -s -H "Authorization: Bearer YOUR_TOKEN" \
+curl -s -G \
+  -H "Authorization: Bearer YOUR_TOKEN" \
   "https://YOUR_GRAFANA_HOST/api/datasources/proxy/uid/YOUR_LOKI_UID/loki/api/v1/query_range" \
-  --data-urlencode 'query={namespace="your-service"}' \
+  --data-urlencode 'query={namespace="your-service"} |= "ERROR"' \
   --data-urlencode "start=$(date -v-1H +%s)000000000" \
   --data-urlencode "end=$(date +%s)000000000" \
-  --data-urlencode "limit=50"
+  --data-urlencode "limit=100" \
+  --data-urlencode "direction=backward"
 ```
 
+> На Linux: вместо `date -v-1H` использовать `date -d '1 hour ago'`
+
 ### Полезные лейблы Loki:
-- `namespace`, `app`, `container`, `pod`, `job`, `service_name`
+- `namespace`, `app`, `container`, `pod`, `job`, `cluster`, `service_name`
+
+### Как найти Loki datasource UID:
+```bash
+curl -s -H "Authorization: Bearer YOUR_TOKEN" \
+  "https://YOUR_GRAFANA_HOST/api/datasources" | jq '.[] | select(.type=="loki") | {uid, name, id}'
+```
 
 ## Mattermost (пример)
 
