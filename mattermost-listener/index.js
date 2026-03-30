@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Оператор 21O — Mattermost WebSocket Listener
- * Слушает упоминания @operator-210 и пишет в inbox-файл для обработки OpenClaw
+ * Слушает упоминания @YOUR_BOT_USERNAME и пишет в inbox-файл для обработки OpenClaw
  */
 
 const WebSocket = require('ws');
