@@ -57,9 +57,11 @@ Then: write status/summary to CONTEXT.md and MEMORY.md ## Recent before ending.
 ## Subagents — when and how
 
 ### Triggers (any one → spawn a subagent):
-1. Task requires >10 tool calls (code analysis, research, iterative file work)
+1. Task requires >5 tool calls (code analysis, research, iterative file work)
 2. Task is parallelizable — can be split into independent parts
 3. Current context is already large and the task will push it over
+
+**Why 5, not 10:** Every tool call expands context. Delegating earlier keeps the main session lean, reduces compaction frequency, and preserves detail in long conversations. The cost (slight spawn delay) is almost always worth it.
 
 ### Required subagent output format:
 ```
